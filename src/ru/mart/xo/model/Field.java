@@ -1,6 +1,6 @@
 package ru.mart.xo.model;
 
-import ru.mart.xo.model.exception.InvalidePointException;
+import ru.mart.xo.model.exception.InvalidPointException;
 import ru.mart.xo.model.exception.AlreadyOccupiedException;
 
 import java.awt.*;
@@ -17,17 +17,17 @@ public class Field {
         return FIELD_SIZE;
     }
 
-    public Figure getFigure (final Point point) throws InvalidePointException {
+    public Figure getFigure (final Point point) throws InvalidPointException {
         if (!checkPoint(point)) {
-            throw new InvalidePointException();
+            throw new InvalidPointException();
         }
         return field[point.x][point.y];
     }
 
-    public void setFigure( final Point point, final Figure figure) throws InvalidePointException,
+    public void setFigure( final Point point, final Figure figure) throws InvalidPointException,
                                                                         AlreadyOccupiedException {
         if (!checkPoint(point)) {
-            throw new InvalidePointException();
+            throw new InvalidPointException();
         }
         if (field[point.x][point.y] != null){
             throw new AlreadyOccupiedException();
