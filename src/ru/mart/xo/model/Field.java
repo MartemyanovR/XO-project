@@ -34,7 +34,7 @@ public class Field {
     }
 
     private boolean isCheckPointer(final Point point) {
-        return isCheckCoordinate(point.x, field.length) || !isCheckCoordinate(point.y, field[point.x].length);
+        return !(isCheckCoordinate(point.x, field.length) && isCheckCoordinate(point.y, field[point.x].length));
     }
 
     private boolean isCheckCoordinate(final int coordinate, int maxCoordinate) {
