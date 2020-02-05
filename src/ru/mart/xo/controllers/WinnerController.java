@@ -7,32 +7,32 @@ import ru.mart.xo.model.exception.InvalidPointException;
 import java.awt.*;
 
 public class WinnerController {
-
+    public static final int MIN_VAL = 0;
     public Figure getWinner(Field field) {
         try {
-            for (int i = 0; i < field.getSize(); i++) {
-                if (check(field, new Point(i, 0), p -> new Point(p.x,p.y+1))) //лямбда выражение
-                    return field.getFigure(new Point(i, 0));
+            for (int i = MIN_VAL; i < field.getSize(); i++) {
+                if (check(field, new Point(i, MIN_VAL), p -> new Point(p.x,p.y+1))) //лямбда выражение
+                    return field.getFigure(new Point(i, MIN_VAL));
             }
-            for (int i = 0; i < field.getSize(); i++) {
-                if (check(field, new Point(0, i), new IPointerChecked() {  //анонимный класс
+            for (int i = MIN_VAL; i < field.getSize(); i++) {
+                if (check(field, new Point(MIN_VAL, i), new IPointGenerator() {  //анонимный класс
                     @Override
                     public Point next(Point p) {
                         return new Point(p.x+1, p.y);
                     }
                 }))
-                    return field.getFigure(new Point(0, i));
+                    return field.getFigure(new Point(MIN_VAL, i));
             }
-            if (check(field, new Point(0, 0), new IPointerChecked() { //анонимный класс
+            if (check(field, new Point(MIN_VAL, MIN_VAL), new IPointGenerator() { //анонимный класс
                     @Override
                     public Point next(Point p) {
                         return new Point(p.x +1, p.y + 1);
                     }
                 }))
                     return field.getFigure(new Point(0, 0));
-            if (check(field, new Point(0, field.getSize()-1),
+            if (check(field, new Point(MIN_VAL, field.getSize()-1),
                     p -> new Point (p.x+1, p.y-1)))     //лямбда
-                return field.getFigure(new Point(0, 0));
+                return field.getFigure(new Point(MIN_VAL, field.getSize()-1));
         }
         catch (InvalidPointException e) {
                 e.printStackTrace();
@@ -40,22 +40,22 @@ public class WinnerController {
         return null;
     }
 
-    private boolean check(Field field, Point startPoint, IPointerChecked pointerChecked){
-       // Point p1 = startPoint;  //local variable is redundant
-        Point p2 = pointerChecked.next(startPoint);
-        Point p3 = pointerChecked.next(p2);
+    private boolean check(Field field, Point currentPoint, IPointGenerator pointGenerator) {
+        final Figure currentFigure;
+        final Figure nextFigure;
+        final Point nextPoint = pointGenerator.next(currentPoint);
         try {
-            if (field.getFigure(startPoint) == field.getFigure(p2) &&
-                    field.getFigure(startPoint) == field.getFigure(p3))
-                return true;
+            currentFigure = field.getFigure(currentPoint);
+            nextFigure = field.getFigure(nextPoint);
+        } catch (InvalidPointException e) {
+            return true;
         }
-        catch (InvalidPointException e) {
-            e.printStackTrace();
-        }
-        return false;
+        if (currentFigure == null) return false;
+        if (currentFigure != nextFigure) return false;
+        return check(field, nextPoint, pointGenerator);
     }
 
-    private interface IPointerChecked {
+    private interface IPointGenerator {
         Point next (Point p);
     }
 }
