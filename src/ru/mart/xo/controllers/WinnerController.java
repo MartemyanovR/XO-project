@@ -50,8 +50,10 @@ public class WinnerController {
         } catch (InvalidPointException e) {
             return true;
         }
-        if (currentFigure == null) return false;
-        if (currentFigure != nextFigure) return false;
+        if (currentFigure == null)
+            return false;
+        if (currentFigure != nextFigure)
+            return false;
         return check(field, nextPoint, pointGenerator);
     }
 
