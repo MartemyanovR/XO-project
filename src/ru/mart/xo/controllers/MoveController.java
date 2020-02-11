@@ -8,7 +8,7 @@ import ru.mart.xo.model.exception.InvalidPointException;
 
 import java.awt.*;
 
-public class MoveController {
+public class  MoveController {
         public void applyFigure (final Field field,
                                  final Point point,
                                  final Figure figure) throws InvalidPointException, AlreadyOccupiedException{
